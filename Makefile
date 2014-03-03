@@ -1,15 +1,17 @@
-SQLITE-LIB=sqlite3-for-composite
+SQLITE = sqlite3-for-composite
+LIBSQLITE = lib$(SQLITE).a
 
-all: $(SQLITE-LIB).a test.c
-	cc -o test test.c -l$(SQLITE-LIB) -L. -lpthread -ldl
+test: $(LIBSQLITE) test.c
+	cc -o test test.c -l$(SQLITE) -L.
 
-$(SQLITE-LIB).o:
-	cc -c -o $(SQLITE-LIB).o src/sqlite3.c 
+$(SQLITE).o: src/sqlite3.h
+	cc -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -c -o $(SQLITE).o src/sqlite3.c
 
-$(SQLITE-LIB).a: $(SQLITE-LIB).o
-	ar rcs lib$(SQLITE-LIB).a $(SQLITE-LIB).o
+$(LIBSQLITE): $(SQLITE).o
+	ar rcs $(LIBSQLITE) $(SQLITE).o
 	
+.PHONY: clean
 clean:
-	rm lib$(SQLITE-LIB).a $(SQLITE-LIB).o test
+	rm $(LIBSQLITE) $(SQLITE).o test
 
 	
