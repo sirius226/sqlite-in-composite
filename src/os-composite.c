@@ -4,7 +4,12 @@
 #define MAX_PATHNAME 512
 #endif
 
+/*
+** Write nBuf bytes of random data to the supplied buffer zBuf.
+*/
 static int compositeRandomness(sqlite3_vfs *NotUsed, int nBuf, char *zBuf) {
+    /* Depends on randomnnes mechanism provided by Composite.
+       Simplely do nothing. */
     return nBuf;
 }
 
