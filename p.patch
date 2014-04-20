@@ -1,0 +1,24 @@
+[1mdiff --git a/src/components/Makefile.comp b/src/components/Makefile.comp[m
+[1mindex c5baa33..9008037 100644[m
+[1m--- a/src/components/Makefile.comp[m
+[1m+++ b/src/components/Makefile.comp[m
+[36m@@ -20,6 +20,10 @@[m [mCCVDIR=$(CDIR)/lib/libccv[m
+ CCVOBJ=$(CCVDIR)/cos_libccv.a[m
+ CCVINC=-I$(CCVDIR)[m
+ [m
+[32m+[m[32mSQLITEDIR=$(CDIR)/lib/libsqlite[m
+[32m+[m[32mSQLITEOBJ=$(SQLITEDIR)/libsqlite.a[m
+[32m+[m[32mSQLITEINC=-I$(SQLITEDIR)[m
+[32m+[m
+ POSIX_LIB=$(CDIR)/lib/posix/posix.o[m
+ [m
+ #PONY=$(CDIR)/cidl/[m
+[1mdiff --git a/src/components/lib/Makefile b/src/components/lib/Makefile[m
+[1mindex 4a4c834..3f4cc89 100644[m
+[1m--- a/src/components/lib/Makefile[m
+[1m+++ b/src/components/lib/Makefile[m
+[36m@@ -58,3 +58,4 @@[m [minit: clean distclean all[m
+ 	make -C posix clean [m
+ 	make -C libccv clean [m
+ 	make -C libccv cos_libccv.a[m
+[32m+[m	[32mmake -C libsqlite[m
