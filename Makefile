@@ -1,21 +1,11 @@
-SQLITE = sqlite3-for-composite
-LIBSQLITE = lib$(SQLITE).a
-OS = os-composite
+DIR_BASE = $(HOME)/research/composite/src
+DIR_TEST = $(DIR_BASE)/components/implementation/tests/
+DIR_LIB = $(DIR_BASE)/components/lib/
+DIR_RUNSCRIPT = $(DIR_BASE)/platform/linux/util
 
-test: $(LIBSQLITE) test.c
-	cc -o test test.c -l$(SQLITE) -L. -Iinclude
+.PHONY: init
 
-$(SQLITE).o: include/sqlite3.h
-	cc -fno-stack-protector -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_OMIT_LOCALTIME -DSQLITE_OS_OTHER=1 -c -o $(SQLITE).o src/sqlite3.c -Iinclude
-
-$(OS).o: src/os-composite.c
-	cc -c -o $(OS).o src/os-composite.c -Iinclude
-
-$(LIBSQLITE): $(SQLITE).o $(OS).o
-	ar rcs $(LIBSQLITE) $(SQLITE).o $(OS).o
-	
-.PHONY: clean
-clean:
-	rm $(LIBSQLITE) $(SQLITE).o $(OS).o test
-
-	
+init:
+	cp -r ./libsqlite/ $(DIR_LIB)
+	cp -r ./unit_sqlite/ $(DIR_TEST)
+	cp unit_sqlite.sh $(DIR_RUNSCRIPT)
