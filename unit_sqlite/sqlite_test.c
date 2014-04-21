@@ -13,7 +13,7 @@
 
 #define DEBUG
 #ifdef  DEBUG
-  #define LOGD(fmt, ...) printc("SQLite-in-Composite: "fmt, ##__VA_ARGS__)
+  #define LOGD(fmt, ...) printc("[SQLite Test] "fmt"\n", ##__VA_ARGS__)
 #else
   #define LOGD(fmt, ...)
 #endif /* DEBUG */ 
@@ -44,20 +44,17 @@ static void __fill_data(sqlite3 *db) {
    }
 }
 
-int cos_init(void)
+void cos_init(void)
 {
-    sqlite3 *db;
-    
-    if (SQLITE_OK != sqlite3_open_v2(":memory:", &db, SQLITE_OPEN_READWRITE, NULL)) {
-        LOGD("ERR: %s\n", sqlite3_errmsg(db));
-        return 1;
-    }
-    LOGD("Datebase connected.\n");
+    LOGD("BEGIN");
 
-//    __create_table(db);
-//    __fill_data(db);
-    sqlite3_close(db);
-    LOGD("Database closed.\n");
-    return 0;
+    td_t td = tsplit(cos_spd_id(), td_root, NULL, 0, TOR_ALL, 0); 
+    if (td < 0) {
+        LOGD("FAILED: split");
+        return;
+    }
+    
+    trelease(cos_spd_id(), td);
+    LOGD("PASSED: split->release");
 }
 
