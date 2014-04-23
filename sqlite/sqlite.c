@@ -19,19 +19,28 @@
   #define LOGD(fmt, ...)
 #endif /* DEBUG */ 
 
+#define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
+
 static sqlite3 *g_handler[16];
+static int g_empty_idx;
 
 td_t tsplit(spdid_t spdid, td_t td, char *param, int len, tor_flags_t tflags, long evtid) 
 {
+    if (g_empty_idx < 0 || g_empty_idx > (int)ARRAY_SIZE(g_handler)) {
+        LOGD("ERR: Out of Capacity");
+        return -1;
+    }
+
     sqlite3 *db;
     
     if (SQLITE_OK != sqlite3_open_v2(":memory:", &db, SQLITE_OPEN_READWRITE, NULL)) {
         LOGD("ERR: %s\n", sqlite3_errmsg(db));
-        return 1;
+        return -1;
     }
-    LOGD("Datebase connected.\n");
+    LOGD("Datebase connected.");
 
-    td_t rtd = 0;
+    td_t rtd = g_empty_idx;
+    g_empty_idx = (int)g_handler[rtd];
     g_handler[rtd] = db;
     return rtd;
 }
@@ -46,7 +55,9 @@ void trelease(spdid_t spdid, td_t td)
 {
     sqlite3 *db = g_handler[td];
     sqlite3_close(db);
-    LOGD("Database closed.\n");
+    g_handler[td] = (void *)g_empty_idx;
+    g_empty_idx = td;
+    LOGD("Database closed.");
 }
 
 int tread(spdid_t spdid, td_t td, int cbid, int sz)
@@ -64,5 +75,10 @@ int twrite(spdid_t spdid, td_t td, int cbid, int sz)
 int cos_init(void)
 {
     LOGD("Component Init.");
-	return 0;
+    int i = 0;
+    for (i = 0; i < (int)ARRAY_SIZE(g_handler); ++i) {
+        g_handler[i] = (void *)(i + 1); /* Initialize handler array */
+    }
+    g_empty_idx = 0;
+    return 0;
 }
