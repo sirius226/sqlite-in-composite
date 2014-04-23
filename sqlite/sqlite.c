@@ -23,7 +23,6 @@ static sqlite3 *g_handler[16];
 
 td_t tsplit(spdid_t spdid, td_t td, char *param, int len, tor_flags_t tflags, long evtid) 
 {
-    LOGD("Invocked.");
     sqlite3 *db;
     
     if (SQLITE_OK != sqlite3_open_v2(":memory:", &db, SQLITE_OPEN_READWRITE, NULL)) {

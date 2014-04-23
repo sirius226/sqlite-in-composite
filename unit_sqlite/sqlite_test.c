@@ -48,13 +48,20 @@ void cos_init(void)
 {
     LOGD("BEGIN");
 
-    td_t td = tsplit(cos_spd_id(), td_root, NULL, 0, TOR_ALL, 0); 
-    if (td < 0) {
+    td_t t1, t2;
+    long evt1;
+    char *params1 = "unused";
+
+    evt1 = evt_split(cos_spd_id(), 0, 0);
+    assert(evt1 > 0);
+
+    t1 = tsplit(cos_spd_id(), td_root, params1, strlen(params1), TOR_ALL, evt1);
+    if (t1 < 0) {
         LOGD("FAILED: split");
         return;
     }
     
-    trelease(cos_spd_id(), td);
+    trelease(cos_spd_id(), t1);
     LOGD("PASSED: split->release");
 }
 
