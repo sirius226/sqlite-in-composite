@@ -12,6 +12,11 @@
 
 #include "../../../lib/libsqlite/sqlite3.h"
 
+static cos_lock_t fs_lock;
+struct fsobj root;
+#define LOCK() if (lock_take(&fs_lock)) BUG();
+#define UNLOCK() if (lock_release(&fs_lock)) BUG();
+
 #define DEBUG
 #ifdef  DEBUG
   #define LOGD(fmt, ...) printc("[SQLite Torrent] "fmt"\n", ##__VA_ARGS__)
@@ -68,8 +73,25 @@ int tread(spdid_t spdid, td_t td, int cbid, int sz)
 
 int twrite(spdid_t spdid, td_t td, int cbid, int sz)
 {
-	int ret = -1;
-	return ret;
+    LOGD("twrite invoked");
+    char *buf;
+    char *errMsg = NULL;
+    int ret = 0;
+    buf = cbuf2buf(cbid, sz);
+    LOGD("buf: %s", buf);
+    sqlite3 *db = g_handler[td];
+    LOGD("db: %p", db);
+
+    if (0) {
+    //if (SQLITE_OK != sqlite3_exec(db, buf, NULL, NULL, &errMsg)){
+        LOGD("ERR: %s\n", errMsg);
+        sqlite3_free(errMsg);
+	    ret = -1;
+    } else {
+        LOGD("Table created successfully.\n");
+        ret = 0;
+    }
+    return ret;
 }
 
 int cos_init(void)
