@@ -82,8 +82,7 @@ int twrite(spdid_t spdid, td_t td, int cbid, int sz)
     sqlite3 *db = g_handler[td];
     LOGD("db: %p", db);
 
-    if (0) {
-    //if (SQLITE_OK != sqlite3_exec(db, buf, NULL, NULL, &errMsg)){
+    if (SQLITE_OK != sqlite3_exec(db, buf, NULL, NULL, &errMsg)){
         LOGD("ERR: %s\n", errMsg);
         sqlite3_free(errMsg);
 	    ret = -1;
