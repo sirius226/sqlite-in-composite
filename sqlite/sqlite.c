@@ -22,14 +22,14 @@ struct fsobj root;
   #define LOGD(fmt, ...) printc("[SQLite Torrent] "fmt"\n", ##__VA_ARGS__)
 #else
   #define LOGD(fmt, ...)
-#endif /* DEBUG */ 
+#endif /* DEBUG */
 
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 
 static sqlite3 *g_handler[16];
 static int g_empty_idx;
 
-td_t tsplit(spdid_t spdid, td_t td, char *param, int len, tor_flags_t tflags, long evtid) 
+td_t tsplit(spdid_t spdid, td_t td, char *param, int len, tor_flags_t tflags, long evtid)
 {
     if (g_empty_idx < 0 || g_empty_idx > (int)ARRAY_SIZE(g_handler)) {
         LOGD("ERR: Out of Capacity");
@@ -37,7 +37,7 @@ td_t tsplit(spdid_t spdid, td_t td, char *param, int len, tor_flags_t tflags, lo
     }
 
     sqlite3 *db;
-    
+
     if (SQLITE_OK != sqlite3_open_v2(":memory:", &db, SQLITE_OPEN_READWRITE, NULL)) {
         LOGD("ERR: %s\n", sqlite3_errmsg(db));
         return -1;
@@ -87,7 +87,7 @@ int twrite(spdid_t spdid, td_t td, int cbid, int sz)
         sqlite3_free(errMsg);
 	    ret = -1;
     } else {
-        LOGD("Table created successfully.\n");
+        LOGD("Execute Successfully.\n");
         ret = 0;
     }
     return ret;

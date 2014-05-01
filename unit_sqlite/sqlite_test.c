@@ -15,7 +15,7 @@
   #define LOGD(fmt, ...) printc("[SQLite Test] "fmt"\n", ##__VA_ARGS__)
 #else
   #define LOGD(fmt, ...)
-#endif /* DEBUG */ 
+#endif /* DEBUG */
 
 //static void __fill_data(sqlite3 *db) {
 //   char *sql = "INSERT INTO student (name, age) VALUES ('Qing', '26');";
@@ -47,7 +47,7 @@ void cos_init(void)
         LOGD("FAILED: split");
         return;
     }
-    
+
     trelease(cos_spd_id(), t1);
     LOGD("PASSED: split->release");
 

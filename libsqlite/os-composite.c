@@ -7,7 +7,7 @@
 /*
 ** Write nBuf bytes of random data to the supplied buffer zBuf.
 */
-static int compositeRandomness(sqlite3_vfs *NotUsed, int nBuf, char *zBuf) 
+static int compositeRandomness(sqlite3_vfs *NotUsed, int nBuf, char *zBuf)
 {
     /* Depends on randomnnes mechanism provided by Composite.
        Simplely do nothing. */
@@ -19,11 +19,12 @@ static int compositeClose(sqlite3_file *pFile)
     return 0;
 }
 
-static int compositeWrite(sqlite3_file *pFile, const void *zBuf, int iAmt, sqlite_int64 iOfst) {
+static int compositeWrite(sqlite3_file *pFile, const void *zBuf, int iAmt, sqlite_int64 iOfst)
+{
     return SQLITE_OK;
 }
 
-static int compositeOpen(sqlite3_vfs *pVfs, const char *zName, sqlite3_file *pFile, int flags, int *pOutFlags) 
+static int compositeOpen(sqlite3_vfs *pVfs, const char *zName, sqlite3_file *pFile, int flags, int *pOutFlags)
 {
     static const sqlite3_io_methods compositeIO = {
         1,                            /* iVersion */
@@ -72,7 +73,7 @@ int sqlite3_os_init(void)
     };
 
     sqlite3_vfs_register(&composite_vfs, 1);
-    return SQLITE_OK; 
+    return SQLITE_OK;
 }
 
 int sqlite3_os_end(void)
